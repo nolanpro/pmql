@@ -1,0 +1,35 @@
+name: test-workflows
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pm4core-docker
+        uses: actions/checkout@v2
+        with:
+          repository: 'ProcessMaker/pm4core-docker'
+          ref: 'v2'
+
+      - name: Checkout pm4-tools
+        uses: actions/checkout@v2
+        with:
+          repository: 'ProcessMaker/pm4-tools'
+          path: pmtools
+          token: ${{ secrets.githubToken }}
+
+      - name: Cache build assets
+        uses: actions/cache@v2
+        with:
+          path: cache
+          key: ${{ runner.os }}-enterprise-build
+      
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+
+      - name: Build
+        run: docker-compose up builder
+        env:
+          GITHUB_TOKEN: ${{ secrets.githubToken }}
+      - name: Run App
+        run: docker-compose up -d app
+      - name: Test
+        run: docker-compose exec app phpunit
