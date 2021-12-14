@@ -15,7 +15,7 @@ jobs:
         with:
           repository: 'ProcessMaker/pm4-tools'
           path: pmtools
-          token: ${{ secrets.githubToken }}
+          token: ${{ secrets.PM_GITHUB_TOKEN }}
 
       - name: Cache build assets
         uses: actions/cache@v2
@@ -28,7 +28,7 @@ jobs:
       - name: Build
         run: docker-compose up builder
         env:
-          GITHUB_TOKEN: ${{ secrets.githubToken }}
+          GITHUB_TOKEN: ${{ secrets.PM_GITHUB_TOKEN }}
       - name: Run App
         run: docker-compose up -d app
       - name: Test
