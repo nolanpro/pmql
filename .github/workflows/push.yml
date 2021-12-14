@@ -15,7 +15,6 @@ jobs:
         with:
           repository: 'ProcessMaker/pm4-tools'
           path: pmtools
-          token: ${{ secrets.PM_GITHUB_TOKEN }}
 
       - name: Cache build assets
         uses: actions/cache@v2
